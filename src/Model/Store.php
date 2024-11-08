@@ -1,4 +1,6 @@
 <?php
+namespace App\Model;
+
 class Store {
     private $id;
     private $name;
@@ -31,18 +33,18 @@ class Store {
     public static function all($db) {
         $stmt = $db->prepare("SELECT * FROM stores");
         $stmt->execute();
-        $stores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stores = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         return array_map(fn($store) => new self($store['id'], $store['name'], $store['location'], $store['category']), $stores);
     }
 
     public static function find($pdo, $id) {
         // Requête SQL pour obtenir les données du magasin
         $stmt = $pdo->prepare("SELECT id, name, location, category FROM stores WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
         $stmt->execute();
         
         // Récupération des résultats sous forme de tableau associatif
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $data = $stmt->fetch(\PDO::FETCH_ASSOC);
         
         if ($data) {
             // Retourne un objet Store en utilisant les quatre paramètres
@@ -63,7 +65,7 @@ class Store {
 
     public static function update($db, $id, $name, $location, $category) {
         $stmt = $db->prepare("UPDATE stores SET name = :name, location = :location, category = :category WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':location', $location);
         $stmt->bindParam(':category', $category);
@@ -72,7 +74,7 @@ class Store {
 
     public static function delete($db, $id) {
         $stmt = $db->prepare("DELETE FROM stores WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
         return $stmt->execute();
     }
 

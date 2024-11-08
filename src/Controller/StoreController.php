@@ -1,57 +1,66 @@
 <?php
-class StoreController {
 
-    private $db;
+namespace App\Controller;
 
-    public function __construct($db) {
-        $this->db = $db;
+use App\Service\StoreService;
+
+class StoreController
+{
+    protected $storeService;
+
+    public function __construct($pdo)
+    {
+        $this->storeService = new StoreService($pdo);
     }
 
-    public function getAllStores() {
-        $stores = Store::all($this->db);
-        if (!$stores) {
-            http_response_code(404);
-            echo json_encode(["message" => "No stores found"]);
-            return;
+    // public function getAllStores()
+    // {
+    //     echo json_encode($this->storeService->getAll());
+    // }
+
+    // public function getStore($id)
+    // {
+    //     echo json_encode($this->storeService->getById($id));
+    // }
+
+    public function listStores()
+    {
+        $stores = $this->storeService->getAllStores();
+        include __DIR__ . '/../../public/store_list.php';
+    }
+
+    public function showStore($id)
+    {
+        $store = $this->storeService->getStoreById($id);
+        include __DIR__ . '/../../public/store_detail.php';
+    }
+
+    public function addStore()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $this->storeService->addStore($data);
+        echo json_encode(['status' => 'Store added']);
+    }
+    
+
+    public function updateStore($id)
+    {
+        try {
+            $data = json_decode(file_get_contents('php://input'), true);
+            $this->storeService->updateStore($id, $data);
+            echo json_encode(['status' => 'Store updated']);
+        } catch (\Exception $e) {
+            echo json_encode(['error' => $e->getMessage()]);
         }
-        include '../public/store_list.php';
     }
 
-    public function getStoreById($id) {
-        $store = Store::find($this->db, $id);
-        if (!$store) {
-            // Si le magasin n'existe pas, afficher un message d'erreur
-            http_response_code(404);
-            echo json_encode(["message" => "No stores found"]);
-            return;
-            
-        }
-        // Inclure le fichier store_detail.php et passer l'objet $store
-        include '../public/store_detail.php';
-    }
-
-
-
-    public function createStore($data) {
-        $id = Store::create($this->db, $data['name'], $data['location'], $data['category']);
-        echo json_encode(["id" => $id]);
-    }
-
-    public function updateStore($id, $data) {
-        if (Store::update($this->db, $id, $data['name'], $data['location'], $data['category'])) {
-            echo json_encode(["message" => "Store updated"]);
-        } else {
-            http_response_code(404);
-            echo json_encode(["message" => "Store not found"]);
-        }
-    }
-
-    public function deleteStore($id) {
-        if (Store::delete($this->db, $id)) {
-            echo json_encode(["message" => "Store deleted"]);
-        } else {
-            http_response_code(404);
-            echo json_encode(["message" => "Store not found"]);
+    public function deleteStore($id)
+    {
+        try {
+            $this->storeService->deleteStore($id);
+            echo json_encode(['status' => 'Store deleted']);
+        } catch (\Exception $e) {
+            echo json_encode(['error' => $e->getMessage()]);
         }
     }
 }

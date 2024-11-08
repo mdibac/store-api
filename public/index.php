@@ -1,50 +1,24 @@
 <?php
-require_once '../src/Database.php';
-require_once '../src/Model/Store.php';
-require_once '../src/Controller/StoreController.php';
 
-$config = require '../config/database.php';
-$db = (new Database($config))->getConnection();
+require_once __DIR__ . '/../vendor/autoload.php';
+use App\Controller\StoreController; 
 
-$controller = new StoreController($db);
+$dbConfig = include __DIR__ . '/../config/database.php';
+$pdo = new PDO(
+    "mysql:host={$dbConfig['host']};dbname={$dbConfig['dbname']}",
+    $dbConfig['user'],
+    $dbConfig['password']
+);
 
-$requestMethod = $_SERVER['REQUEST_METHOD'];
-$requestUri = explode('?', $_SERVER['REQUEST_URI'])[0];
-$uri = explode('/', trim($requestUri, '/'));
-$id = isset($uri[1]) ? (int) $uri[1] : null;
+$router = include __DIR__ . '/../config/routes.php';
+$match = $router->match();
 
-// Initialiser la variable $stores à null
-$stores = null;
-
-switch ($requestMethod) {
-    case 'GET':
-        if (count($uri) == 1) {
-            // Récupérer tous les magasins
-            $stores = $controller->getAllStores(); // Alimente $stores avec les magasins
-        } elseif (count($uri) == 2) {
-            // Récupérer un magasin spécifique par ID
-            $store = $controller->getStoreById($id);
-            exit;
-        }
-        break;
-    case 'POST':
-        $data = json_decode(file_get_contents('php://input'), true);
-        $controller->createStore($data);
-        break;
-    case 'PUT':
-        if ($id) {
-            $data = json_decode(file_get_contents('php://input'), true);
-            $controller->updateStore($id, $data);
-        }
-        break;
-    case 'DELETE':
-        if ($id) {
-            $controller->deleteStore($id);
-        }
-        break;
-    default:
-        http_response_code(405);
-        echo json_encode(["message" => "Method not allowed"]);
+if ($match) {
+    list($controllerName, $action) = explode('@', $match['target']);
+    $className = "App\\Controller\\$controllerName";
+    $controller = new $className($pdo);
+    call_user_func_array([$controller, $action], $match['params']);
+} else {
+    http_response_code(404);
+    echo json_encode(['error' => 'Route not found']);
 }
-
-?>

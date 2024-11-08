@@ -1,0 +1,25 @@
+# Documentation de l'API des Magasins
+
+## Endpoints
+
+### Récupérer la liste des magasins
+
+- **Méthode** : `GET`
+- **URL** : `/api/stores`
+
+### Récupérer un magasin par ID
+
+- **Méthode** : `GET`
+- **URL** : `/api/store/{id}`
+
+### Ajouter un magasin
+
+- **Méthode** : `POST`
+- **URL** : `/api/store`
+- **Body JSON** :
+  ```json
+  {
+      "name": "Nom du magasin",
+      "address": "Adresse",
+      "city": "Ville"
+  }

@@ -28,10 +28,6 @@ class ComposerStaticInit0c32ba3511f786cdf49b0be0df2ee207
             'Psr\\Http\\Client\\' => 16,
             'PhpOption\\' => 10,
         ),
-        'H' => 
-        array (
-            'Hamdi\\TestTechniqueHamdiBaccouch\\' => 33,
-        ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
@@ -42,6 +38,10 @@ class ComposerStaticInit0c32ba3511f786cdf49b0be0df2ee207
         'D' => 
         array (
             'Dotenv\\' => 7,
+        ),
+        'A' => 
+        array (
+            'App\\' => 4,
         ),
     );
 
@@ -60,8 +60,8 @@ class ComposerStaticInit0c32ba3511f786cdf49b0be0df2ee207
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -70,10 +70,6 @@ class ComposerStaticInit0c32ba3511f786cdf49b0be0df2ee207
         'PhpOption\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
-        ),
-        'Hamdi\\TestTechniqueHamdiBaccouch\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
@@ -94,6 +90,10 @@ class ComposerStaticInit0c32ba3511f786cdf49b0be0df2ee207
         'Dotenv\\' => 
         array (
             0 => __DIR__ . '/..' . '/vlucas/phpdotenv/src',
+        ),
+        'App\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
         ),
     );
 

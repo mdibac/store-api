@@ -1,0 +1,9 @@
+CREATE DATABASE IF NOT EXISTS store_api;
+USE store_api;
+
+CREATE TABLE stores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    category VARCHAR(255) NOT NULL
+);
